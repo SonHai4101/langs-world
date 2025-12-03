@@ -21,33 +21,120 @@ generator prismabox {
   output                      = "../generated/prismabox"
 }
 
+enum Language {
+  en
+  vi
+  jp
+  zh
+  kr
+  fr
+  de
+  es
+}
+
+
+// --------------------
+// USER
+// --------------------
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String
+  id        String    @id @default(cuid())
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+
+  knownWords    UserWord[]
+  texts         UserText[]
+  quizResults   QuizResult[]
 }
 
-model Song {
-  id         String   @id @default(cuid())
-  title      String
-  artist     String?
-  album      String?
-  albumCover String?
-  duration   Int? // seconds
-  audioId    String?  @unique
-  audio      Audio?   @relation(fields: [audioId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
 
-model Audio {
+// --------------------
+// TEXTS (ARTICLES USER READS)
+// --------------------
+model UserText {
   id        String   @id @default(cuid())
-  url       String
-  key       String // R2 object key for file management
-  song      Song?
+  userId    String
+  language  Language
+  title     String?
+  content   String   // raw text
+  createdAt DateTime @default(now())
+
+  user         User           @relation(fields: [userId], references: [id])
+  generatedQuiz GeneratedQuiz?
+  quizResults   QuizResult[]
+
+  @@index([userId])
+  @@index([language])
+}
+
+
+// --------------------
+// WORD DICTIONARY
+// Supports meaning, IPA/pinyin/furigana, frequency for difficulty scoring
+// --------------------
+model Word {
+  id         String     @id @default(cuid())
+  text       String
+  normalized String?    // lowercase, no accents
+  language   Language
+  meaning    String?
+  ipa        String?    // for EN or other
+  reading    String?    // pinyin / furigana / hangul breakdown
+  frequency  Int?       // 1 = most common, higher = rarer
+
+  userWords  UserWord[]
+
+  @@unique([text, language])
+  @@index([language, frequency])
+}
+
+
+// --------------------
+// USER VOCABULARY MASTERY
+// --------------------
+model UserWord {
+  id        String   @id @default(cuid())
+  userId    String
+  wordId    String
+  level     Int      @default(0) // 0–5 spaced repetition mastery
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  word Word @relation(fields: [wordId], references: [id])
+
+  @@unique([userId, wordId])
+  @@index([userId])
+  @@index([wordId])
+}
+
+
+// --------------------
+// AUTO-GENERATED QUIZZES PER TEXT
+// --------------------
+model GeneratedQuiz {
+  id         String   @id @default(cuid())
+  userTextId String   @unique
+  questions  Json     // structured quiz format
+
+  userText UserText @relation(fields: [userTextId], references: [id])
+}
+
+
+// --------------------
+// QUIZ RESULTS
+// --------------------
+model QuizResult {
+  id          String   @id @default(cuid())
+  userId      String
+  userTextId  String
+  score       Int
+  total       Int
+  takenAt     DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  userText UserText @relation(fields: [userTextId], references: [id])
+
+  @@index([userId])
+  @@index([userTextId])
 }
