@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    env_file:
+      - apps/backend/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+
+  # Optional: PostgreSQL database (uncomment if needed)
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+  #     POSTGRES_DB: ${POSTGRES_DB:-langs_world}
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
