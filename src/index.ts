@@ -3,7 +3,6 @@ import cors from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { authPlugin } from "./plugin/authPlugin";
 import { uploadAudioPlugin } from "./plugin/uploadAudioPlugin";
-import { betterUploadPlugin } from "./plugin/betterUploadPlugin";
 import { songPlugin } from "./plugin/songPlugin";
 
 const app = new Elysia()
@@ -29,10 +28,6 @@ const app = new Elysia()
           {
             name: "Auth",
             description: "Authentication endpoints",
-          },
-          {
-            name: "Better Upload",
-            description: "Upload audio endpoints",
           },
           {
             name: "Song",
@@ -63,13 +58,9 @@ const app = new Elysia()
     tags: ["Health"],
   })
   .group("/api", (app) =>
-    app
-      .use(authPlugin)
-      .use(uploadAudioPlugin)
-      .use(betterUploadPlugin)
-      .use(songPlugin)
+    app.use(authPlugin).use(uploadAudioPlugin).use(songPlugin)
   )
-  .listen(8080);
+  .listen(8888);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

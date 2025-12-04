@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.937.0",
-    "@better-upload/client": "^3.0.4",
-    "@better-upload/server": "^3.0.4",
     "@elysiajs/bearer": "^1.4.1",
     "@elysiajs/cors": "^1.4.0",
     "@elysiajs/jwt": "^1.4.0",
