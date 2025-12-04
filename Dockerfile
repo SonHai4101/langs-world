@@ -47,11 +47,11 @@ COPY --chown=bun:bun src ./src/
 COPY --chown=bun:bun package.json ./
 COPY --chown=bun:bun prisma ./prisma/
 
-EXPOSE 8080
+EXPOSE 8888
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8080/health || exit 1
+    CMD curl -f http://localhost:8888/health || exit 1
 
 # Start the application
 CMD ["bun", "run", "src/index.ts"]

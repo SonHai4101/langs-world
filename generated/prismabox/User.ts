@@ -6,39 +6,219 @@ import { __nullable__ } from "./__nullable__";
 
 export const UserPlain = t.Object(
   {
-    id: t.Integer(),
-    username: t.String(),
+    id: t.String(),
     email: t.String(),
     password: t.String(),
     createdAt: t.Date(),
-    updatedAt: t.Date(),
   },
   { additionalProperties: false },
 );
 
-export const UserRelations = t.Object({}, { additionalProperties: false });
+export const UserRelations = t.Object(
+  {
+    knownWords: t.Array(
+      t.Object(
+        {
+          id: t.String(),
+          userId: t.String(),
+          wordId: t.String(),
+          level: t.Integer(),
+          createdAt: t.Date(),
+          updatedAt: t.Date(),
+        },
+        { additionalProperties: false },
+      ),
+      { additionalProperties: false },
+    ),
+    texts: t.Array(
+      t.Object(
+        {
+          id: t.String(),
+          userId: t.String(),
+          language: t.Union(
+            [
+              t.Literal("en"),
+              t.Literal("vi"),
+              t.Literal("jp"),
+              t.Literal("zh"),
+              t.Literal("kr"),
+              t.Literal("fr"),
+              t.Literal("de"),
+              t.Literal("es"),
+            ],
+            { additionalProperties: false },
+          ),
+          title: __nullable__(t.String()),
+          content: t.String(),
+          createdAt: t.Date(),
+        },
+        { additionalProperties: false },
+      ),
+      { additionalProperties: false },
+    ),
+    quizResults: t.Array(
+      t.Object(
+        {
+          id: t.String(),
+          userId: t.String(),
+          userTextId: t.String(),
+          score: t.Integer(),
+          total: t.Integer(),
+          takenAt: t.Date(),
+        },
+        { additionalProperties: false },
+      ),
+      { additionalProperties: false },
+    ),
+  },
+  { additionalProperties: false },
+);
 
 export const UserPlainInputCreate = t.Object(
-  { username: t.String(), email: t.String(), password: t.String() },
+  { email: t.String(), password: t.String() },
   { additionalProperties: false },
 );
 
 export const UserPlainInputUpdate = t.Object(
-  {
-    username: t.Optional(t.String()),
-    email: t.Optional(t.String()),
-    password: t.Optional(t.String()),
-  },
+  { email: t.Optional(t.String()), password: t.Optional(t.String()) },
   { additionalProperties: false },
 );
 
 export const UserRelationsInputCreate = t.Object(
-  {},
+  {
+    knownWords: t.Optional(
+      t.Object(
+        {
+          connect: t.Array(
+            t.Object(
+              {
+                id: t.String({ additionalProperties: false }),
+              },
+              { additionalProperties: false },
+            ),
+            { additionalProperties: false },
+          ),
+        },
+        { additionalProperties: false },
+      ),
+    ),
+    texts: t.Optional(
+      t.Object(
+        {
+          connect: t.Array(
+            t.Object(
+              {
+                id: t.String({ additionalProperties: false }),
+              },
+              { additionalProperties: false },
+            ),
+            { additionalProperties: false },
+          ),
+        },
+        { additionalProperties: false },
+      ),
+    ),
+    quizResults: t.Optional(
+      t.Object(
+        {
+          connect: t.Array(
+            t.Object(
+              {
+                id: t.String({ additionalProperties: false }),
+              },
+              { additionalProperties: false },
+            ),
+            { additionalProperties: false },
+          ),
+        },
+        { additionalProperties: false },
+      ),
+    ),
+  },
   { additionalProperties: false },
 );
 
 export const UserRelationsInputUpdate = t.Partial(
-  t.Object({}, { additionalProperties: false }),
+  t.Object(
+    {
+      knownWords: t.Partial(
+        t.Object(
+          {
+            connect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+            disconnect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+          },
+          { additionalProperties: false },
+        ),
+      ),
+      texts: t.Partial(
+        t.Object(
+          {
+            connect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+            disconnect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+          },
+          { additionalProperties: false },
+        ),
+      ),
+      quizResults: t.Partial(
+        t.Object(
+          {
+            connect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+            disconnect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+          },
+          { additionalProperties: false },
+        ),
+      ),
+    },
+    { additionalProperties: false },
+  ),
 );
 
 export const UserWhere = t.Partial(
@@ -49,12 +229,10 @@ export const UserWhere = t.Partial(
           AND: t.Union([Self, t.Array(Self, { additionalProperties: false })]),
           NOT: t.Union([Self, t.Array(Self, { additionalProperties: false })]),
           OR: t.Array(Self, { additionalProperties: false }),
-          id: t.Integer(),
-          username: t.String(),
+          id: t.String(),
           email: t.String(),
           password: t.String(),
           createdAt: t.Date(),
-          updatedAt: t.Date(),
         },
         { additionalProperties: false },
       ),
@@ -68,13 +246,13 @@ export const UserWhereUnique = t.Recursive(
       [
         t.Partial(
           t.Object(
-            { id: t.Integer(), username: t.String() },
+            { id: t.String(), email: t.String() },
             { additionalProperties: false },
           ),
           { additionalProperties: false },
         ),
         t.Union(
-          [t.Object({ id: t.Integer() }), t.Object({ username: t.String() })],
+          [t.Object({ id: t.String() }), t.Object({ email: t.String() })],
           { additionalProperties: false },
         ),
         t.Partial(
@@ -94,12 +272,10 @@ export const UserWhereUnique = t.Recursive(
         t.Partial(
           t.Object(
             {
-              id: t.Integer(),
-              username: t.String(),
+              id: t.String(),
               email: t.String(),
               password: t.String(),
               createdAt: t.Date(),
-              updatedAt: t.Date(),
             },
             { additionalProperties: false },
           ),
@@ -114,11 +290,12 @@ export const UserSelect = t.Partial(
   t.Object(
     {
       id: t.Boolean(),
-      username: t.Boolean(),
       email: t.Boolean(),
       password: t.Boolean(),
       createdAt: t.Boolean(),
-      updatedAt: t.Boolean(),
+      knownWords: t.Boolean(),
+      texts: t.Boolean(),
+      quizResults: t.Boolean(),
       _count: t.Boolean(),
     },
     { additionalProperties: false },
@@ -126,16 +303,21 @@ export const UserSelect = t.Partial(
 );
 
 export const UserInclude = t.Partial(
-  t.Object({ _count: t.Boolean() }, { additionalProperties: false }),
+  t.Object(
+    {
+      knownWords: t.Boolean(),
+      texts: t.Boolean(),
+      quizResults: t.Boolean(),
+      _count: t.Boolean(),
+    },
+    { additionalProperties: false },
+  ),
 );
 
 export const UserOrderBy = t.Partial(
   t.Object(
     {
       id: t.Union([t.Literal("asc"), t.Literal("desc")], {
-        additionalProperties: false,
-      }),
-      username: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
       email: t.Union([t.Literal("asc"), t.Literal("desc")], {
@@ -145,9 +327,6 @@ export const UserOrderBy = t.Partial(
         additionalProperties: false,
       }),
       createdAt: t.Union([t.Literal("asc"), t.Literal("desc")], {
-        additionalProperties: false,
-      }),
-      updatedAt: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
     },
