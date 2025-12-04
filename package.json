@@ -1,38 +1,25 @@
 {
   "name": "langs-world",
-  "version": "1.0.50",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts",
-    "run": "bun run src/index.ts"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.937.0",
-    "@elysiajs/bearer": "^1.4.1",
-    "@elysiajs/cors": "^1.4.0",
-    "@elysiajs/jwt": "^1.4.0",
-    "@elysiajs/swagger": "^1.3.1",
-    "@prisma/adapter-neon": "^7.0.0",
-    "@prisma/adapter-pg": "^7.0.0",
-    "@prisma/client": "^7.0.0",
-    "@prisma/client-runtime-utils": "^7.0.0",
-    "@prisma/extension-accelerate": "^2.0.2",
-    "@types/node": "^24.10.1",
-    "elysia": "latest",
-    "music-metadata": "^11.10.3",
-    "pg": "^8.16.3",
-    "prismabox": "^1.1.25",
-    "tsx": "^4.20.6"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:backend": "turbo dev --filter=@langs-world/backend",
+    "dev:frontend": "turbo dev --filter=@langs-world/frontend",
+    "db:generate": "turbo db:generate",
+    "db:push": "turbo db:push",
+    "db:migrate": "turbo db:migrate",
+    "db:studio": "turbo db:studio"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "bun-types": "latest",
-    "prisma": "^7.0.0"
-  },
-  "module": "src/index.js",
-  "type": "module",
-  "private": true,
-  "peerDependencies": {
+    "turbo": "^2.6.2",
     "typescript": "^5.9.3"
-  }
+  },
+  "packageManager": "bun@1.2.0"
 }

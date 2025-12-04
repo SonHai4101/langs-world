@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+
+
+@theme {
+    --color-text: #000000;
+    --color-background: #f9f9f9;
+    --color-primary: #1957d2;
+    --color-secondary: #f9fafa;
+    --color-background-card: #ffffff;
+    --color-input: #f3f4f6;
+    --color-text-placehoder: #828282;
+}
+
+.dark {
+    --color-text: #ffffff;
+    --color-background: #020202;
+    --color-primary: #1957d2;
+    --color-secondary: #1c1c1c;
+    --color-background-card: #0b0b0b;
+    --color-input: #020202;
+    --color-text-placehoder: #e6e6e6;
+}
+

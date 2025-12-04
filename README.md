@@ -1,15 +1,88 @@
-# Elysia with Bun runtime
+# Langs World - Monorepo
+
+A language learning platform with backend API and frontend application.
+
+## Project Structure
+
+```
+langs-world/
+├── apps/
+│   ├── backend/          # Elysia.js API server
+│   └── frontend/         # Frontend application (to be created)
+├── package.json          # Root workspace configuration
+└── README.md
+```
 
 ## Getting Started
-To get started with this template, simply paste this command into your terminal:
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) installed
+- PostgreSQL database
+
+### Installation
+
 ```bash
-bun create elysia ./elysia-example
+# Install all dependencies
+bun install
+
+# Install backend dependencies
+cd apps/backend && bun install
 ```
 
-## Development
-To start the development server run:
+### Development
+
 ```bash
+# Run backend only
+bun run dev:backend
+
+# Or from root
 bun run dev
+
+# Run frontend (when created)
+bun run dev:frontend
 ```
 
-Open http://localhost:3000/ with your browser to see the result.
+### Backend
+
+The backend is built with:
+
+- **Elysia.js** - Fast web framework
+- **Prisma** - Database ORM
+- **PostgreSQL** - Database
+- **JWT** - Authentication
+
+#### Backend Scripts
+
+```bash
+cd apps/backend
+
+# Development
+bun run dev
+
+# Database
+bun run db:generate    # Generate Prisma client
+bun run db:push        # Push schema to database
+bun run db:migrate     # Run migrations
+bun run db:studio      # Open Prisma Studio
+```
+
+#### Environment Variables
+
+Create `apps/backend/.env`:
+
+```env
+DATABASE_URL="postgresql://..."
+JWT_SECRET="your-secret-key"
+```
+
+## API Documentation
+
+Once the backend is running, visit:
+
+- API Docs: http://localhost:8888/swagger
+- Health Check: http://localhost:8888/health
+
+## License
+
+Private
