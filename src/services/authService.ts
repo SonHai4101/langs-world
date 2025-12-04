@@ -77,7 +77,7 @@ export const authService = new Elysia({ name: "Service.Auth" })
       if (!payload) throw status(401, "Invalid or expired token");
       const user = await db.user.findUnique({
         where: {
-          id: Number(payload.sub),
+          id: payload.sub,
         },
       });
       if (!user) throw status(401, "User not found");

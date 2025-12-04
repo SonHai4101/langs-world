@@ -34,6 +34,7 @@ export const UserTextRelations = t.Object(
       {
         id: t.String(),
         email: t.String(),
+        username: t.String(),
         password: t.String(),
         createdAt: t.Date(),
       },

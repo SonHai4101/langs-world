@@ -8,6 +8,7 @@ export const UserPlain = t.Object(
   {
     id: t.String(),
     email: t.String(),
+    username: t.String(),
     password: t.String(),
     createdAt: t.Date(),
   },
@@ -75,12 +76,16 @@ export const UserRelations = t.Object(
 );
 
 export const UserPlainInputCreate = t.Object(
-  { email: t.String(), password: t.String() },
+  { email: t.String(), username: t.String(), password: t.String() },
   { additionalProperties: false },
 );
 
 export const UserPlainInputUpdate = t.Object(
-  { email: t.Optional(t.String()), password: t.Optional(t.String()) },
+  {
+    email: t.Optional(t.String()),
+    username: t.Optional(t.String()),
+    password: t.Optional(t.String()),
+  },
   { additionalProperties: false },
 );
 
@@ -231,6 +236,7 @@ export const UserWhere = t.Partial(
           OR: t.Array(Self, { additionalProperties: false }),
           id: t.String(),
           email: t.String(),
+          username: t.String(),
           password: t.String(),
           createdAt: t.Date(),
         },
@@ -246,13 +252,13 @@ export const UserWhereUnique = t.Recursive(
       [
         t.Partial(
           t.Object(
-            { id: t.String(), email: t.String() },
+            { id: t.String(), username: t.String() },
             { additionalProperties: false },
           ),
           { additionalProperties: false },
         ),
         t.Union(
-          [t.Object({ id: t.String() }), t.Object({ email: t.String() })],
+          [t.Object({ id: t.String() }), t.Object({ username: t.String() })],
           { additionalProperties: false },
         ),
         t.Partial(
@@ -274,6 +280,7 @@ export const UserWhereUnique = t.Recursive(
             {
               id: t.String(),
               email: t.String(),
+              username: t.String(),
               password: t.String(),
               createdAt: t.Date(),
             },
@@ -291,6 +298,7 @@ export const UserSelect = t.Partial(
     {
       id: t.Boolean(),
       email: t.Boolean(),
+      username: t.Boolean(),
       password: t.Boolean(),
       createdAt: t.Boolean(),
       knownWords: t.Boolean(),
@@ -321,6 +329,9 @@ export const UserOrderBy = t.Partial(
         additionalProperties: false,
       }),
       email: t.Union([t.Literal("asc"), t.Literal("desc")], {
+        additionalProperties: false,
+      }),
+      username: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
       password: t.Union([t.Literal("asc"), t.Literal("desc")], {

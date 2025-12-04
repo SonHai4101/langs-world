@@ -3,7 +3,7 @@ import cors from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { authPlugin } from "./plugin/authPlugin";
 import { uploadAudioPlugin } from "./plugin/uploadAudioPlugin";
-import { songPlugin } from "./plugin/songPlugin";
+import { userTextPlugin } from "./plugin/userTextPlugin";
 
 const app = new Elysia()
   .use(cors())
@@ -30,8 +30,8 @@ const app = new Elysia()
             description: "Authentication endpoints",
           },
           {
-            name: "Song",
-            description: "Song endpoints",
+            name: "UserText",
+            description: "User's Text endpoints",
           },
         ],
         components: {
@@ -58,7 +58,7 @@ const app = new Elysia()
     tags: ["Health"],
   })
   .group("/api", (app) =>
-    app.use(authPlugin).use(uploadAudioPlugin).use(songPlugin)
+    app.use(authPlugin).use(uploadAudioPlugin).use(userTextPlugin)
   )
   .listen(8888);
 

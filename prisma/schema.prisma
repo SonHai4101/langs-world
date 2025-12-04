@@ -32,21 +32,20 @@ enum Language {
   es
 }
 
-
 // --------------------
 // USER
 // --------------------
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
+  id        String   @id @default(cuid())
+  email     String
+  username  String   @unique
   password  String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
-  knownWords    UserWord[]
-  texts         UserText[]
-  quizResults   QuizResult[]
+  knownWords  UserWord[]
+  texts       UserText[]
+  quizResults QuizResult[]
 }
-
 
 // --------------------
 // TEXTS (ARTICLES USER READS)
@@ -56,10 +55,10 @@ model UserText {
   userId    String
   language  Language
   title     String?
-  content   String   // raw text
+  content   String // raw text
   createdAt DateTime @default(now())
 
-  user         User           @relation(fields: [userId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
   generatedQuiz GeneratedQuiz?
   quizResults   QuizResult[]
 
@@ -67,27 +66,25 @@ model UserText {
   @@index([language])
 }
 
-
 // --------------------
 // WORD DICTIONARY
 // Supports meaning, IPA/pinyin/furigana, frequency for difficulty scoring
 // --------------------
 model Word {
-  id         String     @id @default(cuid())
+  id         String   @id @default(cuid())
   text       String
-  normalized String?    // lowercase, no accents
+  normalized String? // lowercase, no accents
   language   Language
   meaning    String?
-  ipa        String?    // for EN or other
-  reading    String?    // pinyin / furigana / hangul breakdown
-  frequency  Int?       // 1 = most common, higher = rarer
+  ipa        String? // for EN or other
+  reading    String? // pinyin / furigana / hangul breakdown
+  frequency  Int? // 1 = most common, higher = rarer
 
-  userWords  UserWord[]
+  userWords UserWord[]
 
   @@unique([text, language])
   @@index([language, frequency])
 }
-
 
 // --------------------
 // USER VOCABULARY MASTERY
@@ -108,29 +105,27 @@ model UserWord {
   @@index([wordId])
 }
 
-
 // --------------------
 // AUTO-GENERATED QUIZZES PER TEXT
 // --------------------
 model GeneratedQuiz {
-  id         String   @id @default(cuid())
-  userTextId String   @unique
-  questions  Json     // structured quiz format
+  id         String @id @default(cuid())
+  userTextId String @unique
+  questions  Json // structured quiz format
 
   userText UserText @relation(fields: [userTextId], references: [id])
 }
-
 
 // --------------------
 // QUIZ RESULTS
 // --------------------
 model QuizResult {
-  id          String   @id @default(cuid())
-  userId      String
-  userTextId  String
-  score       Int
-  total       Int
-  takenAt     DateTime @default(now())
+  id         String   @id @default(cuid())
+  userId     String
+  userTextId String
+  score      Int
+  total      Int
+  takenAt    DateTime @default(now())
 
   user     User     @relation(fields: [userId], references: [id])
   userText UserText @relation(fields: [userTextId], references: [id])
