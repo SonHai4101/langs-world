@@ -31,13 +31,16 @@ COPY --chown=bun:bun apps/backend/package.json apps/backend/bun.lockb* ./
 # Install all dependencies (including dev for Prisma generation)
 RUN bun install --frozen-lockfile
 
-# Copy Prisma schema and config
+# Copy Prisma schema
 COPY --chown=bun:bun apps/backend/prisma ./prisma/
-COPY --chown=bun:bun apps/backend/prisma.config.ts ./
 COPY --chown=bun:bun apps/backend/tsconfig.json ./
 
-# Generate Prisma client
-RUN bunx prisma generate
+# Set a dummy DATABASE_URL for Prisma generation (not used for actual connection)
+# This is required for Prisma to generate the client, but doesn't connect to any database
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
+
+# Generate Prisma client (using schema directly, not prisma.config.ts)
+RUN bunx prisma generate --schema=./prisma/schema.prisma
 
 # Final runtime stage
 FROM system-deps AS runtime
