@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 // import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import useAuthStore from "@/store/useAuthStore";
+import { GiWhiteBook } from "react-icons/gi";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -24,10 +25,16 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 w-full border-b z-50 bg-transparent backdrop-blur-2xl">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="flex gap-4 items-center">
         <Link to="/" className="text-2xl font-extrabold text-primary">
-          HS
+          <GiWhiteBook />
         </Link>
-        <ul className="hidden md:flex items-center gap-8">
+        <div className="flex flex-col">
+          <p className="text-2xl font-bold">LangsWorld</p>
+          <p className="text-sm font-normal">Learn naturally</p>
+        </div>
+        </div>
+        {/* <ul className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
             return (
               <li key={item.href}>
@@ -43,7 +50,7 @@ export function Navbar() {
               </li>
             );
           })}
-        </ul>
+        </ul> */}
 
         <div className="flex items-center gap-4">
           {/* <ThemeSwitcher /> */}

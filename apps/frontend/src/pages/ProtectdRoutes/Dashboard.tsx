@@ -1,12 +1,6 @@
 import { useState } from "react";
-import { Uploader } from "../../components/Uploader";
 import { Button } from "@/components/ui/button";
-import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardHeader } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -17,25 +11,39 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Music, Search, Clock, PlayIcon, Ellipsis } from "lucide-react";
-import { LiaPowerOffSolid } from "react-icons/lia";
-import useAuthStore from "@/store/useAuthStore";
-import { useNavigate } from "react-router";
 import { useDeleteSongById, useGetAllSongs } from "@/hook/useSong";
-import { Card, DropdownMenu, Flex, Table } from "@radix-ui/themes";
+import { Card } from "@radix-ui/themes";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { formatDuration } from "@/helper/formatDuration";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import { toast } from "react-toastify";
 import { useDeleteAudio } from "@/hook/useAudio";
+import { GrDocumentText } from "react-icons/gr";
+import { Textarea } from "@/components/ui/textarea";
+import { FaArrowRight } from "react-icons/fa";
 dayjs.extend(relativeTime);
+
+const steps = [
+  {
+    key: 1,
+    title: "Word Detection",
+    des: "Automatically identifies difficulty levels based on frequency",
+  },
+  {
+    key: 2,
+    title: "Hover Dictionary",
+    des: "Click any word for instant definitions and pronunciation",
+  },
+  {
+    key: 3,
+    title: "Auto Quizzes",
+    des: "Generate comprehension quizzes from your reading",
+  },
+];
 
 export const Dashboard = () => {
   // const [songs, setSongs] = useState<Song[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const { data: allSongs, isLoading: songsLoading } = useGetAllSongs();
   const { mutate: deleteSong } = useDeleteSongById();
   const { mutate: deleteAudio } = useDeleteAudio();
 
@@ -55,13 +63,6 @@ export const Dashboard = () => {
   //   setSong(song); // sets current song
   //   setPlaying(true);
   // };
-
-  const { logOut } = useAuthStore();
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    logOut();
-    navigate("/login");
-  };
 
   // Fetch all songs on mount
 
@@ -91,17 +92,17 @@ export const Dashboard = () => {
   //   }
   // };
 
-  const handleDelete = (songId: string, audioId: string) => {
-    deleteSong(songId, {
-      onSuccess: () => {
-        toast.success("Delete successfully");
-        deleteAudio(audioId)
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
-  };
+  // const handleDelete = (songId: string, audioId: string) => {
+  //   deleteSong(songId, {
+  //     onSuccess: () => {
+  //       toast.success("Delete successfully");
+  //       deleteAudio(audioId);
+  //     },
+  //     onError: (error) => {
+  //       toast.error(error.message);
+  //     },
+  //   });
+  // };
 
   // const openEditDialog = (song: Song) => {
   //   setSelectedSong(song);
@@ -116,168 +117,52 @@ export const Dashboard = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-amber-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-pink-900/20">
-      {/* Header */}
-      <div className="border-b bg-white/50 dark:bg-gray-900/50 backdrop-blur-lg">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                My Music Library
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Manage your uploaded songs
-              </p>
-            </div>
-            <Button onClick={handleLogout} className="gap-2" size="lg">
-              <LiaPowerOffSolid className="size-5" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen py-20 bg-[#faf8f5] dark:from-gray-900 dark:via-purple-900/20 dark:to-pink-900/20">
+      <div className="container mx-auto max-w-4xl px-4 py-8">
         {/* Search Bar */}
-        <div className="mb-8">
-          <div className="flex gap-2 max-w-2xl">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search songs by title, artist, or album..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                // onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                className="pl-10"
-              />
+        <div className="mb-8 flex flex-col gap-2 text-center">
+          <div className="justify-center flex">
+            <div className="text-4xl p-5 rounded-xl bg-[#e1ede7]">
+              <GrDocumentText />
             </div>
-            <Button
-            // onClick={handleSearch}
-            >
-              Search
-            </Button>
-            {searchQuery && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchQuery("");
-                  // fetchSongs();
-                }}
-              >
-                Clear
-              </Button>
-            )}
           </div>
+          <p className="text-4xl font-bold">Start Reading</p>
+          <p className="text-base font-normal">
+            Paste or type any text in your target language to begin learning
+          </p>
         </div>
 
         {/* Upload Section */}
-        <Card className="mb-8 border-dashed border-2 bg-linear-to-br from-white to-purple-50/30 dark:from-gray-800 dark:to-purple-900/10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Music className="h-5 w-5" />
-              Upload Audio File
-            </CardTitle>
-            <CardDescription>
-              Upload an audio file to create a new song entry
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Uploader />
-          </CardContent>
-        </Card>
-
-        {allSongs && allSongs.data.length === 0 ? (
-          <div className="text-center py-20">
-            <Music className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No songs found</h3>
-            <p className="text-muted-foreground mb-6">
-              {searchQuery
-                ? "Try a different search query"
-                : "Get started by adding your first song"}
-            </p>
-            {!searchQuery && (
-              <Uploader type="custom" />
-            )}
+        <div>
+          <Card className="mb-8 border-dashed border-2 border-black/30 bg-linear-to-br from-white to-purple-50/30 dark:from-gray-800 dark:to-purple-900/10">
+            <CardHeader>
+              <Textarea
+                rows={10}
+                placeholder="Paste your text here... &#10;&#10;Try pasting an article, a book excerpt, or any content in the language you're learning."
+                className="resize-none p-0 bg-none border-0 focus-visible:ring-0 shadow-none"
+              />
+            </CardHeader>
+          </Card>
+          <div className="justify-end flex">
+            <Button className="flex gap-3 text-lg text-white py-5">
+              Analyze Text <FaArrowRight />
+            </Button>
           </div>
-        ) : (
-          <Table.Root>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Album</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Date added</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>
-                  <Clock />
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
-            {songsLoading ? (
-              <Table.Body>
-                <Table.Row>
-                  <Table.RowHeaderCell colSpan={5}>
-                    <div className="flex items-center justify-center py-20">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-                    </div>
-                  </Table.RowHeaderCell>
-                </Table.Row>
-              </Table.Body>
-            ) : (
-              allSongs?.data.map((song, index) => (
-                <Table.Body className="hover:bg-white/70" key={song.id}>
-                  <Table.Row className="group" align="center">
-                    <Table.RowHeaderCell
-                      className="min-w-11"
-                      onClick={() => {
-                        usePlayerStore
-                          .getState()
-                          .setQueue(allSongs.data, index);
-                      }}
-                    >
-                      <PlayIcon className="size-5 hidden group-hover:inline-block cursor-pointer" />
-                      <span className="group-hover:hidden">{index + 1}</span>
-                    </Table.RowHeaderCell>
+        </div>
 
-                    <Table.Cell>
-                      <Flex gap="2" align="center">
-                        <img
-                          className="size-8"
-                          src={song.albumCover || "/default-cover-image.png"}
-                          alt="album cover"
-                        />
-                        <Flex direction="column">
-                          <p>{song.title}</p>
-                          <p>{song.artist}</p>
-                        </Flex>
-                      </Flex>
-                    </Table.Cell>
-                    <Table.Cell>{song.album}</Table.Cell>
-                    <Table.Cell>{dayjs(song.createdAt).fromNow()}</Table.Cell>
-                    <Table.Cell>{formatDuration(song.duration)}</Table.Cell>
-                    <Table.Cell>
-                      <DropdownMenu.Root>
-                        <DropdownMenu.Trigger>
-                          <Button variant="ghost" className="cursor-pointer">
-                            <Ellipsis className="size-4" />
-                          </Button>
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Content>
-                          <DropdownMenu.Item
-                            color="red"
-                            onClick={() => handleDelete(song.id, song.audioId)}
-                          >
-                            Delete
-                          </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                      </DropdownMenu.Root>
-                    </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              ))
-            )}
-          </Table.Root>
-        )}
+        <div className="flex gap-8 justify-between mt-20">
+          {steps.map((step) => (
+            <div key={step.key} className="flex flex-col gap-2 text-center">
+              <div className="justify-center flex">
+                <p className="bg-[#f4eee0] rounded-full w-fit py-3 px-5">
+                  {step.key}
+                </p>
+              </div>
+              <p className="font-bold">{step.title}</p>
+              <p>{step.des}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Edit Dialog */}

@@ -27,6 +27,8 @@ interface AuthStore {
   ) => Promise<void>;
 
   loadFromSession: () => void;
+
+  clearAuth: () => void;
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -43,17 +45,17 @@ const useAuthStore = create<AuthStore>()(
           password,
         });
         console.log("res data", res);
-        
+
         if (res.status === HttpStatusCode.Ok) {
           const { accessToken, user } = res.data;
           set({
             user,
-            accessToken: accessToken, // Map the typo to our correct field name
+            accessToken: accessToken,
             isAuthenticated: true,
           });
         }
         console.log("res data", res);
-        
+
         return res.data; // Return the user data, accessToken, and refreshToken
       },
 
@@ -78,6 +80,14 @@ const useAuthStore = create<AuthStore>()(
         // This is now handled by Zustand persist middleware automatically
         // No need for manual localStorage operations
         set({ isLoading: false });
+      },
+
+      clearAuth: () => {
+        set({
+          user: null,
+          accessToken: null,
+          isAuthenticated: false,
+        });
       },
     }),
     {

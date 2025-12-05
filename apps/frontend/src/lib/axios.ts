@@ -32,15 +32,25 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    if (response) {
-      return response;
-    }
     return response;
   },
   (error) => {
+    // Handle 401 Unauthorized errors (token expired or invalid)
+    if (error.response?.status === 401) {
+      // Clear authentication state when token is expired/invalid
+      // We need to import the store dynamically to avoid circular dependency
+      import("../store/useAuthStore").then((module) => {
+        const useAuthStore = module.default;
+        useAuthStore.getState().clearAuth();
+      });
+
+      // Optionally redirect to login page
+      window.location.href = '/login';
+    }
+
     const errorMessage = "Something went wrong";
-    if (error) {
-        console.log(error)
+    if (error.response) {
+      console.log(error);
       throw error.response.data;
     } else {
       throw { ...error, message: errorMessage };
