@@ -7,10 +7,13 @@ const fetchEnglishDictionary = async (word: string) => {
   );
   if (!res.ok) return null;
   const data = await res.json();
+  // Print full response (pretty JSON) so nested objects/arrays aren't shown as [Object ...]
+  console.log("data", JSON.stringify(data, null, 2));
 
   return {
-    meaning: data[0]?.meaning[0]?.definitions[0]?.definition,
-    ipa: data[0]?.phonetics[0]?.text,
+    // API returns `meanings` (plural) and `phonetics` (plural)
+    meaning: data?.[0]?.meanings?.[0]?.definitions?.[0]?.definition,
+    ipa: data?.[0]?.phonetics?.find((p:any) => typeof p.text === 'string' && p.text.length > 0)?.text,
   };
 };
 

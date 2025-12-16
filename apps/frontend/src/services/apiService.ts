@@ -2,6 +2,9 @@ import type { Audio, Pagination, Song } from "@/constants/types";
 import { axiosInstance } from "@/lib/axios";
 
 export const apiService = {
+  word: {
+    lookup: (): Promise<any>
+  },
   song: {
     getAllSongs: (): Promise<{
       data: Song[];
