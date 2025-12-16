@@ -49,7 +49,7 @@ export const userTextPlugin = new Elysia({
         const normalizedBody = {
           ...body,
           content: body.content.trim(),
-          title: body.title?.trim() || body.title,
+          // title: body.title?.trim() || body.title,
         };
         return createNewUserText(normalizedBody, userId);
       } catch (error) {

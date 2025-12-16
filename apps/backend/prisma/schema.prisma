@@ -54,7 +54,7 @@ model UserText {
   id        String   @id @default(cuid())
   userId    String
   language  Language
-  title     String?
+  // title     String?
   content   String // raw text
   createdAt DateTime @default(now())
 
