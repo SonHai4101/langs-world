@@ -12,6 +12,17 @@ export interface Pagination {
   totalPages: number;
 }
 
+export interface Word {
+  id: string;
+  text: string;
+  normalized: string;
+  language: string;
+  meaning: string;
+  ipa: string;
+  reading: string;
+  frequency: number;
+}
+
 export interface Song {
   id: string;
   title: string;

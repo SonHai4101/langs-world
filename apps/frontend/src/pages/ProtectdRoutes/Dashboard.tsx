@@ -20,6 +20,7 @@ import { useDeleteAudio } from "@/hook/useAudio";
 import { GrDocumentText } from "react-icons/gr";
 import { Textarea } from "@/components/ui/textarea";
 import { FaArrowRight } from "react-icons/fa";
+import { usePostText } from "@/hook/useText";
 dayjs.extend(relativeTime);
 
 const steps = [
@@ -46,6 +47,11 @@ export const Dashboard = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { mutate: deleteSong } = useDeleteSongById();
   const { mutate: deleteAudio } = useDeleteAudio();
+  const { mutate: postText } = usePostText();
+
+  const handleAnalyze = () => {
+    postText
+  }
 
   // const togglePlay = (song: Song) => {
   //   const { currentSong, isPlaying, setSong, setPlaying, audioElement } =
@@ -62,58 +68,6 @@ export const Dashboard = () => {
   //   // If clicking a new song → load & play it
   //   setSong(song); // sets current song
   //   setPlaying(true);
-  // };
-
-  // Fetch all songs on mount
-
-  // const handleSearch = async () => {
-  //   if (!searchQuery.trim()) {
-  //     // fetchSongs();
-  //     return;
-  //   }
-  //   try {
-  //     setLoading(true);
-  //     const data = await songService.searchSongs(searchQuery);
-  //     setSongs(data);
-  //   } catch (error) {
-  //     console.error("Failed to search songs:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const handleDeleteSong = async (id: string) => {
-  //   if (!confirm("Are you sure you want to delete this song?")) return;
-  //   try {
-  //     await songService.deleteSong(id);
-  //     // fetchSongs();
-  //   } catch (error) {
-  //     console.error("Failed to delete song:", error);
-  //   }
-  // };
-
-  // const handleDelete = (songId: string, audioId: string) => {
-  //   deleteSong(songId, {
-  //     onSuccess: () => {
-  //       toast.success("Delete successfully");
-  //       deleteAudio(audioId);
-  //     },
-  //     onError: (error) => {
-  //       toast.error(error.message);
-  //     },
-  //   });
-  // };
-
-  // const openEditDialog = (song: Song) => {
-  //   setSelectedSong(song);
-  //   // setFormData({
-  //   //   title: song.title,
-  //   //   artist: song.artist || "",
-  //   //   album: song.album || "",
-  //   //   duration: song.duration || 0,
-  //   //   audioUrl: song.audio?.url || "",
-  //   // });
-  //   setIsEditDialogOpen(true);
   // };
 
   return (
@@ -144,7 +98,7 @@ export const Dashboard = () => {
             </CardHeader>
           </Card>
           <div className="justify-end flex">
-            <Button className="flex gap-3 text-lg text-white py-5">
+            <Button className="flex gap-3 text-lg text-white py-5" onClick={handleAnalyze}>
               Analyze Text <FaArrowRight />
             </Button>
           </div>
@@ -164,79 +118,6 @@ export const Dashboard = () => {
           ))}
         </div>
       </div>
-
-      {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Song</DialogTitle>
-            <DialogDescription>
-              Update the song information below.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-title">Title *</Label>
-              <Input
-                id="edit-title"
-                placeholder="Song title"
-                // value={formData.title}
-                onChange={() => {}}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-artist">Artist</Label>
-              <Input
-                id="edit-artist"
-                placeholder="Artist name"
-                // value={formData.artist}
-                onChange={() => {}}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-album">Album</Label>
-              <Input
-                id="edit-album"
-                placeholder="Album name"
-                // value={formData.album}
-                onChange={() => {}}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-duration">Duration (seconds)</Label>
-              <Input
-                id="edit-duration"
-                type="number"
-                placeholder="Duration in seconds"
-                // value={formData.duration}
-                onChange={() => {}}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-audioUrl">Audio URL</Label>
-              <Input
-                id="edit-audioUrl"
-                placeholder="https://..."
-                // value={formData.audioUrl}
-                onChange={() => {}}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsEditDialogOpen(false);
-                // resetForm();
-                // setSelectedSong(null);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button onClick={() => {}}>Update Song</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

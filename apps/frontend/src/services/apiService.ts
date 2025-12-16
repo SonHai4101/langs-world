@@ -1,9 +1,19 @@
-import type { Audio, Pagination, Song } from "@/constants/types";
+import type { Audio, Pagination, Song, Word } from "@/constants/types";
 import { axiosInstance } from "@/lib/axios";
 
 export const apiService = {
   word: {
-    lookup: (): Promise<any>
+    lookup: (body: { word: string; language: string }): Promise<Word> =>
+      axiosInstance
+        .get("/word/lookup", { params: body })
+        .then((res) => res.data),
+  },
+  text: {
+    postNewText: (body: {
+      language: string;
+      title?: string;
+      content: string;
+    }) => axiosInstance.post("/user-text/", body),
   },
   song: {
     getAllSongs: (): Promise<{
