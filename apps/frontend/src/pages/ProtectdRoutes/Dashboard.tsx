@@ -21,6 +21,7 @@ import { GrDocumentText } from "react-icons/gr";
 import { Textarea } from "@/components/ui/textarea";
 import { FaArrowRight } from "react-icons/fa";
 import { usePostText } from "@/hook/useText";
+import { useNavigate } from "react-router";
 dayjs.extend(relativeTime);
 
 const steps = [
@@ -42,33 +43,14 @@ const steps = [
 ];
 
 export const Dashboard = () => {
-  // const [songs, setSongs] = useState<Song[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const { mutate: deleteSong } = useDeleteSongById();
-  const { mutate: deleteAudio } = useDeleteAudio();
+  const navigate = useNavigate();
   const { mutate: postText } = usePostText();
+  const [content, setContent] = useState("");
 
   const handleAnalyze = () => {
-    postText
-  }
-
-  // const togglePlay = (song: Song) => {
-  //   const { currentSong, isPlaying, setSong, setPlaying, audioElement } =
-  //     usePlayerStore.getState();
-
-  //   if (!audioElement) return;
-
-  //   // If clicking the same song → toggle play/pause
-  //   if (currentSong?.id === song.id) {
-  //     setPlaying(!isPlaying);
-  //     return;
-  //   }
-
-  //   // If clicking a new song → load & play it
-  //   setSong(song); // sets current song
-  //   setPlaying(true);
-  // };
+    // postText(content);
+    navigate("/read-view");
+  };
 
   return (
     <div className="min-h-screen py-20 bg-[#faf8f5] dark:from-gray-900 dark:via-purple-900/20 dark:to-pink-900/20">
@@ -94,11 +76,16 @@ export const Dashboard = () => {
                 rows={10}
                 placeholder="Paste your text here... &#10;&#10;Try pasting an article, a book excerpt, or any content in the language you're learning."
                 className="resize-none p-0 bg-none border-0 focus-visible:ring-0 shadow-none"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               />
             </CardHeader>
           </Card>
           <div className="justify-end flex">
-            <Button className="flex gap-3 text-lg text-white py-5" onClick={handleAnalyze}>
+            <Button
+              className="flex gap-3 text-lg text-white py-5"
+              onClick={handleAnalyze}
+            >
               Analyze Text <FaArrowRight />
             </Button>
           </div>

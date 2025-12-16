@@ -1,5 +1,6 @@
-import type { Audio, Pagination, Song, Word } from "@/constants/types";
+import type { Audio, Pagination, Song, Text, Word } from "@/constants/types";
 import { axiosInstance } from "@/lib/axios";
+import axios from "axios";
 
 export const apiService = {
   word: {
@@ -9,11 +10,19 @@ export const apiService = {
         .then((res) => res.data),
   },
   text: {
-    postNewText: (body: {
-      language: string;
-      title?: string;
-      content: string;
-    }) => axiosInstance.post("/user-text/", body),
+    postNewText: (body: { content: string }) =>
+      axiosInstance.post("/user-text/", body),
+    getText: (): Promise<{
+      data: Text[];
+      pagination: Pagination;
+    }> => axiosInstance.get(`/user-text/`).then((res) => res.data),
+  },
+  dictionary: {
+    lookup(word: string) {
+      return axios.get(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+      );
+    },
   },
   song: {
     getAllSongs: (): Promise<{

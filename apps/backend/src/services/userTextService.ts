@@ -1,10 +1,10 @@
 import Elysia from "elysia";
 import prisma from "../db";
 import { Prisma } from "../generated/prisma/client";
-import { detecLanguage } from "../utils/detectLanguge";
+import { detectLanguage } from "../utils/detectLanguge";
 
 type UserTextPlainInput = {
-  language: "en" | "vi" | "jp" | "zh" | "kr" | "fr" | "de" | "es";
+  // language: "en" | "vi" | "jp" | "zh" | "kr" | "fr" | "de" | "es";
   // title?: string | null;
   content: string;
 };
@@ -17,7 +17,7 @@ export const userTextService = new Elysia().derive(
       userId: string
     ) => {
       try {
-        const language = detecLanguage(body.content);
+        const language = detectLanguage(body.content);
         const userText = await prisma.userText.create({
           data: {
             content: body.content,

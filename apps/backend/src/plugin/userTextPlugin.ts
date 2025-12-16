@@ -47,7 +47,6 @@ export const userTextPlugin = new Elysia({
 
         // Normalize content: trim whitespace but preserve newlines
         const normalizedBody = {
-          ...body,
           content: body.content.trim(),
           // title: body.title?.trim() || body.title,
         };

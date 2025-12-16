@@ -23,6 +23,14 @@ export interface Word {
   frequency: number;
 }
 
+export interface Text {
+  id: string
+  userId: string
+  language: string
+  content: string
+  createdAt: string
+}
+
 export interface Song {
   id: string;
   title: string;

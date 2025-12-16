@@ -3,5 +3,6 @@ export const keys = {
   song: "song",
   audios: "audios",
   word: "word",
-  text: "text"
+  text: "text",
+  dicitonary: "dicitonary"
 }

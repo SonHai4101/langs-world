@@ -5,6 +5,7 @@ import { Register } from "../pages/Register";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { index } from "../pages/ProtectdRoutes";
 import { Dashboard } from "../pages/ProtectdRoutes/Dashboard";
+import { ReadingView } from "@/pages/ProtectdRoutes/ReadingView";
 
 export const routes = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const routes = createBrowserRouter([
               {
                 path: "",
                 Component: Dashboard,
+              },
+              {
+                path: "/read-view",
+                Component: ReadingView,
               },
             ],
           },
