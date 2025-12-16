@@ -4,6 +4,7 @@ import { swagger } from "@elysiajs/swagger";
 import { authPlugin } from "./plugin/authPlugin";
 import { uploadAudioPlugin } from "./plugin/uploadAudioPlugin";
 import { userTextPlugin } from "./plugin/userTextPlugin";
+import { wordPlugin } from "./plugin/wordPlugin";
 
 const app = new Elysia()
   .use(cors())
@@ -58,7 +59,7 @@ const app = new Elysia()
     tags: ["Health"],
   })
   .group("/api", (app) =>
-    app.use(authPlugin).use(uploadAudioPlugin).use(userTextPlugin)
+    app.use(authPlugin).use(uploadAudioPlugin).use(userTextPlugin).use(wordPlugin)
   )
   .listen(8888);
 
