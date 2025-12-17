@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useDictionary = (word: string | null) => {
   return useQuery({
-    queryKey: [keys.dicitonary, word],
-    queryFn: () => apiService.dictionary.lookup(word!),
-    enabled: !word,
+    // Use a stable key and only enable the query when `word` is present
+    queryKey: [keys.dictionary, word],
+    queryFn: () => apiService.dictionary.lookup(word as string),
+    enabled: Boolean(word),
     staleTime: 1000 * 60 * 60,
     retry: false,
   });

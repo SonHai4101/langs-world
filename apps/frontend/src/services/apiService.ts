@@ -19,9 +19,9 @@ export const apiService = {
   },
   dictionary: {
     lookup(word: string) {
-      return axios.get(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-      );
+      return axios
+        .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then((res) => res.data);
     },
   },
   song: {

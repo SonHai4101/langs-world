@@ -45,11 +45,11 @@ export const ReadingView = () => {
           {textIsLoading ? (
             <p>Loading ...</p>
           ) : text?.data ? (
-            <p>
+            <div>
               {tokenize(text.data[0].content).map((token, idx) => (
                 <HoverWord key={idx} value={token} />
               ))}
-            </p>
+            </div>
           ) : (
             <p>No paragraph found!</p>
           )}

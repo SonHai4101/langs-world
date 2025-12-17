@@ -48,7 +48,7 @@ export const Dashboard = () => {
   const [content, setContent] = useState("");
 
   const handleAnalyze = () => {
-    // postText(content);
+    postText(content);
     navigate("/read-view");
   };
 
