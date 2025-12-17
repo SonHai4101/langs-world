@@ -1,7 +1,6 @@
 import Elysia, { t } from "elysia";
 import { authService } from "../services/authService";
 import { userTextService } from "../services/userTextService";
-import { UserTextPlainInputCreate } from "../../generated/prismabox/UserText";
 
 export const userTextPlugin = new Elysia({
   name: "Plugin.UserText",
@@ -57,6 +56,8 @@ export const userTextPlugin = new Elysia({
       }
     },
     {
-      body: UserTextPlainInputCreate,
+      body: t.Object({
+        content: t.String(),
+      }),
     }
   );
