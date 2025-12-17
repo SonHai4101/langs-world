@@ -26,9 +26,9 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
       <div className="font-semibold">Word: {entry.word}</div>
 
       {ipa ? (
-        <div className="text-xs text-gray-500 mb-1">IPA: {ipa}</div>
+        <div className="text-sm text-gray-500 mb-1">IPA: {ipa}</div>
       ) : (
-        <div className="text-xs text-gray-500 mb-1">No IPA found</div>
+        <div className="text-sm text-gray-500 mb-1">No IPA found</div>
       )}
 
       <div className="text-sm">Definition: {definition}</div>

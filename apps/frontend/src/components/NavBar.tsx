@@ -1,19 +1,10 @@
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 // import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import useAuthStore from "@/store/useAuthStore";
 import { GiWhiteBook } from "react-icons/gi";
 
-const navItems = [
-  { name: "Home", href: "/" },
-  { name: "Projects", href: "/projects" },
-  { name: "About", href: "/about" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
-];
-
 export function Navbar() {
-  const pathname = useLocation().pathname;
   const { logOut } = useAuthStore();
   const navigate = useNavigate();
 
