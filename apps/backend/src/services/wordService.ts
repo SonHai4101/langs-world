@@ -1,15 +1,36 @@
 import Elysia from "elysia";
 import prisma from "../db";
+import { Language } from "../generated/prisma/enums";
+import { normalizeWord } from "../utils/normalizeWord";
+import { fetchEnglishDictionary } from "./dictionaryService";
+import { detectLanguage } from "../utils/detectLanguge";
 
 export const wordService = new Elysia().derive(
   { as: "scoped" },
   ({ status }) => {
-    const createSavedWord = async (userId: string, wordId: string) => {
-      return prisma.userWord.upsert({
-        where: { userId_wordId: { userId, wordId } },
-        create: { userId, wordId, level: 0 },
+    const createSavedWord = async (
+      userId: string,
+      rawValue: string
+    ) => {
+      const normalized = normalizeWord(rawValue)
+      const language = detectLanguage(normalized)
+      const dict = fetchEnglishDictionary(normalized, language)
+      const word = await prisma.word.upsert({
+        where: { text_language: { text, language } },
+        create: { text, language },
         update: {},
       });
+
+      return prisma.userWord.upsert({
+        where: {
+          userId_wordId: {
+            userId,
+            wordId: word.id,
+          }
+        },
+        create: { userId, wordId: word.id, level: 0},
+        update: {}
+      })
     };
 
     const listSavedWord = async (userId: string) => {

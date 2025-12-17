@@ -3,6 +3,7 @@ import { authService } from "../services/authService";
 import { wordService } from "../services/wordService";
 import { getUserInfo } from "../helper/getUserInfo";
 import { dictionaryService } from "../services/dictionaryService";
+import { detectLanguage } from "../utils/detectLanguge";
 
 export const wordPlugin = new Elysia({
   name: "Plugin.Word",
@@ -19,11 +20,12 @@ export const wordPlugin = new Elysia({
   .post(
     "/",
     async ({ createSavedWord, user, body }) => {
-      return createSavedWord(user.id, body.wordId);
+      const language = detectLanguage(body.text)
+      return createSavedWord(user.id, body.text, language);
     },
     {
       body: t.Object({
-        wordId: t.String(),
+        text: t.String(),
       }),
     }
   )

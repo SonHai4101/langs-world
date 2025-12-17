@@ -9,6 +9,7 @@ export const useDictionary = (word: string | null) => {
     queryFn: () => apiService.dictionary.lookup(word as string),
     enabled: Boolean(word),
     staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60 * 24,
     retry: false,
   });
 };

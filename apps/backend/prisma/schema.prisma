@@ -82,7 +82,7 @@ model Word {
 
   userWords UserWord[]
 
-  @@unique([text, language])
+  @@unique([normalized, language])
   @@index([language, frequency])
 }
 

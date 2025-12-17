@@ -8,12 +8,14 @@ const fetchEnglishDictionary = async (word: string) => {
   if (!res.ok) return null;
   const data = await res.json();
   // Print full response (pretty JSON) so nested objects/arrays aren't shown as [Object ...]
-  console.log("data", JSON.stringify(data, null, 2));
+  // console.log("data", JSON.stringify(data, null, 2));
 
   return {
     // API returns `meanings` (plural) and `phonetics` (plural)
     meaning: data?.[0]?.meanings?.[0]?.definitions?.[0]?.definition,
-    ipa: data?.[0]?.phonetics?.find((p:any) => typeof p.text === 'string' && p.text.length > 0)?.text,
+    ipa: data?.[0]?.phonetics?.find(
+      (p: any) => typeof p.text === "string" && p.text.length > 0
+    )?.text,
   };
 };
 
@@ -23,29 +25,40 @@ export const dictionaryService = {
     language: "en" | "vi" | "jp" | "zh" | "kr" | "fr" | "de" | "es"
   ) => {
     const normalized = normalizeWord(text);
+    if (!normalized) return null;
 
-    const existing = await prisma.word.findFirst({
-      where: { normalized, language },
+    const existing = await prisma.word.findUnique({
+      where: {
+        normalized_language: {
+          normalized,
+          language,
+        },
+      },
     });
 
     if (existing) return existing;
 
-    let result: any = null;
+    let result: {meaning?: string; ipa?: string} | null = null
 
     if (language === "en") {
-      result = await fetchEnglishDictionary(text);
+      result = await fetchEnglishDictionary(normalized);
     }
 
     if (!result) return null;
 
-    return prisma.word.create({
-      data: {
-        text,
+    return prisma.word.upsert({
+      where: { normalized_language: {
+        normalized,
+        language
+      }},
+      create: {
+        text: normalized,
         normalized,
         language,
         meaning: result.meaning,
         ipa: result.ipa,
       },
+      update: {}
     });
   },
 };
