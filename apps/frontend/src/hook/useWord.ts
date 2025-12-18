@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
 import { keys } from "@/constants/keys";
-import type { Pagination, UserWord, Word } from "@/constants/types";
+import type { Pagination, UserWord } from "@/constants/types";
 
 export const useLookupWord = () => {
   const queryClient = useQueryClient();
