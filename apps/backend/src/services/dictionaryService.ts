@@ -1,6 +1,6 @@
 import prisma from "../db";
 import { detectLanguage } from "../utils/detectLanguge";
-import { normalizeWord } from "../../../../packages/shared/normalizeWord";
+import { normalizeWord } from "../utils/normalizeWord";
 
 export const fetchEnglishDictionary = async (word: string) => {
   const res = await fetch(

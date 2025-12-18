@@ -5,7 +5,7 @@ import {
   PiBookmarkSimpleLight,
   PiSpeakerSimpleHighLight,
 } from "react-icons/pi";
-import { normalizeWord } from "../../../../packages/shared/normalizeWord";
+import { normalizeWord } from "../../../backend/src/utils/normalizeWord";
 
 type DictionaryTooltipProps = {
   word: string;
