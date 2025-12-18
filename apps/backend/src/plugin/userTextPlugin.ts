@@ -30,6 +30,9 @@ export const userTextPlugin = new Elysia({
         page: t.Optional(t.Numeric({ default: 1, minimum: 1 })),
         limit: t.Optional(t.Numeric({ default: 20, minimum: 1, maximum: 100 })),
       }),
+      detail: {
+        summary: "Get all user's paragraph",
+      },
     }
   )
   .post(
@@ -59,5 +62,8 @@ export const userTextPlugin = new Elysia({
       body: t.Object({
         content: t.String(),
       }),
+      detail: {
+        summary: "Create a new paragraph",
+      },
     }
   );

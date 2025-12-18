@@ -28,18 +28,9 @@ export const wordPlugin = new Elysia({
         page: t.Optional(t.Numeric({ default: 1 })),
         limit: t.Optional(t.Numeric({ default: 20 })),
       }),
-    }
-  )
-  .post(
-    "/",
-    async ({ createSavedWord, user, body }) => {
-      const language = detectLanguage(body.text);
-      return createSavedWord(user.id, body.text, language);
-    },
-    {
-      body: t.Object({
-        text: t.String(),
-      }),
+      detail: {
+        summary: "List user's save word",
+      },
     }
   )
   .get(
@@ -52,5 +43,8 @@ export const wordPlugin = new Elysia({
       params: t.Object({
         word: t.String(),
       }),
+      detail: {
+        summary: "Save word to Word and UserWord",
+      },
     }
   );
