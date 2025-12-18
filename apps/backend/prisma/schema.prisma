@@ -77,6 +77,7 @@ model Word {
   language   Language
   meaning    String?
   ipa        String? // for EN or other
+  sound      String?
   reading    String? // pinyin / furigana / hangul breakdown
   frequency  Int? // 1 = most common, higher = rarer
 

@@ -19,6 +19,7 @@ export interface Word {
   language: string;
   meaning: string;
   ipa: string;
+  sound: string;
   reading: string;
   frequency: number;
 }
@@ -29,25 +30,4 @@ export interface Text {
   language: string
   content: string
   createdAt: string
-}
-
-export interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  album: string;
-  albumCover: string;
-  duration: number;
-  audioId: string;
-  createdAt: string;
-  updatedAt: string;
-  audio: Audio;
-}
-
-export interface Audio {
-  id: string;
-  url: string;
-  key: string;
-  createdAt: string;
-  updatedAt: string;
 }

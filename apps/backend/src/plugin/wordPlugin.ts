@@ -14,13 +14,26 @@ export const wordPlugin = new Elysia({
   .use(getUserInfo)
   .use(wordService)
   .guard({ isSignIn: true })
-  .get("/", async ({ listSavedWord }) => {
-    return listSavedWord;
-  })
+  .get(
+    "/",
+    async ({ listSavedWord, user, query }) => {
+      const userId = user.id;
+      return listSavedWord(userId, {
+        page: query.page ?? 1,
+        limit: query.limit ?? 20,
+      });
+    },
+    {
+      query: t.Object({
+        page: t.Optional(t.Numeric({ default: 1 })),
+        limit: t.Optional(t.Numeric({ default: 20 })),
+      }),
+    }
+  )
   .post(
     "/",
     async ({ createSavedWord, user, body }) => {
-      const language = detectLanguage(body.text)
+      const language = detectLanguage(body.text);
       return createSavedWord(user.id, body.text, language);
     },
     {
@@ -30,23 +43,14 @@ export const wordPlugin = new Elysia({
     }
   )
   .get(
-    `/lookup`,
-    async ({ query }) => {
-      return dictionaryService.lookup(query.word, query.language);
+    `/lookup/:word`,
+    async ({ params, user }) => {
+      const userId = user.id;
+      return dictionaryService.lookup(params.word, userId);
     },
     {
-      query: t.Object({
+      params: t.Object({
         word: t.String(),
-        language: t.Union([
-          t.Literal("en"),
-          t.Literal("vi"),
-          t.Literal("jp"),
-          t.Literal("zh"),
-          t.Literal("kr"),
-          t.Literal("fr"),
-          t.Literal("de"),
-          t.Literal("es"),
-        ]),
       }),
     }
   );

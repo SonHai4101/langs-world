@@ -4,5 +4,6 @@ export const keys = {
   audios: "audios",
   word: "word",
   text: "text",
-  dictionary: "dictionary"
+  dictionary: "dictionary",
+  userWord: "userWord"
 }

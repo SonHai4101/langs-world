@@ -1,7 +1,8 @@
 import prisma from "../db";
+import { detectLanguage } from "../utils/detectLanguge";
 import { normalizeWord } from "../utils/normalizeWord";
 
-const fetchEnglishDictionary = async (word: string) => {
+export const fetchEnglishDictionary = async (word: string) => {
   const res = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
   );
@@ -16,49 +17,64 @@ const fetchEnglishDictionary = async (word: string) => {
     ipa: data?.[0]?.phonetics?.find(
       (p: any) => typeof p.text === "string" && p.text.length > 0
     )?.text,
+    sound: data?.[0]?.phonetics?.find(
+      (p: any) => typeof p.audio === "string" && p.audio.length > 0
+    )?.audio,
   };
 };
 
 export const dictionaryService = {
-  lookup: async (
-    text: string,
-    language: "en" | "vi" | "jp" | "zh" | "kr" | "fr" | "de" | "es"
-  ) => {
+  lookup: async (text: string, userId: string) => {
     const normalized = normalizeWord(text);
     if (!normalized) return null;
 
-    const existing = await prisma.word.findUnique({
-      where: {
-        normalized_language: {
-          normalized,
-          language,
+    const language = detectLanguage(normalized);
+
+    return prisma.$transaction(async (tx) => {
+      let word = await tx.word.findUnique({
+        where: {
+          normalized_language: {
+            normalized,
+            language,
+          },
         },
-      },
-    });
+      });
+      if (!word) {
+        let result: { meaning?: string; ipa?: string; sound?: string } | null =
+          null;
+        if (language === "en") {
+          result = await fetchEnglishDictionary(normalized);
+        }
 
-    if (existing) return existing;
+        if (!result) return null;
 
-    let result: {meaning?: string; ipa?: string} | null = null
+        word = await tx.word.create({
+          data: {
+            text: normalized,
+            normalized,
+            language,
+            meaning: result.meaning,
+            ipa: result.ipa,
+            sound: result.sound,
+          },
+        });
+      }
+      await tx.userWord.upsert({
+        where: {
+          userId_wordId: {
+            userId,
+            wordId: word.id,
+          },
+        },
+        create: {
+          userId,
+          wordId: word.id,
+          level: 0,
+        },
+        update: {},
+      });
 
-    if (language === "en") {
-      result = await fetchEnglishDictionary(normalized);
-    }
-
-    if (!result) return null;
-
-    return prisma.word.upsert({
-      where: { normalized_language: {
-        normalized,
-        language
-      }},
-      create: {
-        text: normalized,
-        normalized,
-        language,
-        meaning: result.meaning,
-        ipa: result.ipa,
-      },
-      update: {}
+      return word;
     });
   },
 };
