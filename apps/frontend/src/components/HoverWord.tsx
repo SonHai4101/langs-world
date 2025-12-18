@@ -21,11 +21,13 @@ export const HoverWord = ({ value }: HoverWordProps) => {
         prefetch(value);
         setShow(true);
       }}
-      onMouseLeave={() => setShow(false)}
     >
       {value}
       {show && (
-        <div className="absolute z-20 top-full left-0 mt-2 bg-white border rounded shadow-lg p-3">
+        <div
+          className="absolute z-20 top-full left-0 mt-2 bg-white border rounded shadow-lg p-3"
+          onMouseLeave={() => setShow(false)}
+        >
           <DictionaryTooltip word={value.toLowerCase()} />
         </div>
       )}

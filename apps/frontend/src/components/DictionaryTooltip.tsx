@@ -1,4 +1,8 @@
 import { useDictionary } from "@/hook/useDictionary";
+import {
+  PiBookmarkSimpleLight,
+  PiSpeakerSimpleHighLight,
+} from "react-icons/pi";
 
 type DictionaryTooltipProps = {
   word: string;
@@ -24,14 +28,28 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
   return (
     <div className="flex flex-col gap-2 min-w-[250px]">
       <div className="font-semibold">Word: {entry.word}</div>
-
       {ipa ? (
         <div className="text-sm text-gray-500 mb-1">IPA: {ipa}</div>
       ) : (
         <div className="text-sm text-gray-500 mb-1">No IPA found</div>
       )}
 
-      <div className="text-sm">Definition: {definition}</div>
+      {definition ? (
+        <div className="text-sm">
+          <span className="font-bold">Definition:</span> {definition}
+        </div>
+      ) : (
+        <div className="text-sm">No Definition found</div>
+      )}
+      <div className="flex gap-3 mt-2">
+        <button className="flex gap-2 min-w-[140px] justify-center py-1 border rounded-xl items-center">
+          <PiSpeakerSimpleHighLight /> Listen
+        </button>
+
+        <button className="flex gap-2 min-w-[140px] justify-center py-1 border rounded-xl items-center">
+          <PiBookmarkSimpleLight /> Save
+        </button>
+      </div>
     </div>
   );
 };
