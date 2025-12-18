@@ -1,7 +1,7 @@
 import Elysia from "elysia";
 import prisma from "../db";
 import { Language } from "../generated/prisma/enums";
-import { normalizeWord } from "../utils/normalizeWord";
+import { normalizeWord } from "../../../../packages/shared/normalizeWord";
 import { fetchEnglishDictionary } from "./dictionaryService";
 import { detectLanguage } from "../utils/detectLanguge";
 

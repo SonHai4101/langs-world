@@ -1,15 +1,52 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
 import { keys } from "@/constants/keys";
+import type { Pagination, UserWord, Word } from "@/constants/types";
 
 export const useLookupWord = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (params: { word: string }) =>
       apiService.word.lookup(params.word),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.word, keys.userWord] });
+    onSuccess: (savedWord) => {
+      queryClient.setQueryData(
+        [keys.userWord, { page: 1, limit: 9999 }],
+        (old: { data: UserWord[]; pagination: Pagination } | undefined) => {
+          if (!old?.data) return old;
+          const alreadyExists = old.data.some(
+            (uw) => uw.word.normalized === savedWord.normalized
+          );
+          if (alreadyExists) return old;
+
+          return {
+            ...old,
+            data: [
+              {
+                id: crypto.randomUUID(), // temp id
+                level: 0,
+                word: savedWord,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              },
+              ...old.data,
+            ],
+          };
+        }
+      );
     },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.userWord] });
+    },
+  });
+};
+
+export const useListUserSaveWord = (query: {
+  page?: number;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: [keys.userWord],
+    queryFn: () => apiService.word.listUserSaveWord(query),
   });
 };
 

@@ -1,4 +1,4 @@
-import type { Pagination, Text, Word } from "@/constants/types";
+import type { Pagination, Text, UserWord, Word } from "@/constants/types";
 import { axiosInstance } from "@/lib/axios";
 import axios from "axios";
 
@@ -6,6 +6,13 @@ export const apiService = {
   word: {
     lookup: (word: string): Promise<Word> =>
       axiosInstance.get(`/word/lookup/${word}`).then((res) => res.data),
+    listUserSaveWord: (query: {
+      page?: number;
+      limit?: number;
+    }): Promise<{
+      data: UserWord[];
+      pagination: Pagination;
+    }> => axiosInstance.get(`/word`, { params: query }).then((res) => res.data),
   },
   text: {
     postNewText: (body: { content: string }) =>

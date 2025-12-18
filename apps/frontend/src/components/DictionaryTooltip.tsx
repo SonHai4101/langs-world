@@ -1,19 +1,24 @@
 import { useDictionary } from "@/hook/useDictionary";
-import { useLookupWord } from "@/hook/useWord";
+import { useListUserSaveWord, useLookupWord } from "@/hook/useWord";
 import { useRef } from "react";
 import {
   PiBookmarkSimpleLight,
   PiSpeakerSimpleHighLight,
 } from "react-icons/pi";
+import { normalizeWord } from "../../../../packages/shared/normalizeWord";
 
 type DictionaryTooltipProps = {
   word: string;
 };
 
 export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
+  const { data: userSaveWord } = useListUserSaveWord({ page: 1, limit: 9999 });
   const { data: dictionaryData, isLoading, isError } = useDictionary(word);
-  const { mutate: saveWord } = useLookupWord();
+  const { mutate: saveWord, isPending } = useLookupWord();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  console.log("data",userSaveWord?.data );
+  
 
   if (isLoading) {
     return <div className="text-xs text-gray-500">Loading ...</div>;
@@ -31,6 +36,11 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
 
   const sound = entry.phonetics?.find((p: any) => p.audio)?.audio;
 
+  const normalizeEntryWord = normalizeWord(entry.word);
+  const isSaved = userSaveWord?.data?.some(
+    (item) => item.word.normalized === normalizeEntryWord
+  );
+
   const playSound = (url?: string) => {
     if (!url) return;
     if (!audioRef.current) {
@@ -46,7 +56,7 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
   };
 
   const handleSaveWord = () => {
-    saveWord(entry.word);
+    saveWord({word: entry.word}, );
   };
 
   return (
@@ -73,10 +83,11 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
         </button>
 
         <button
-          className="flex gap-2 min-w-[140px] justify-center py-1 border rounded-xl items-center bg-white hover:bg-[#f2f0f0]"
+          className="flex gap-2 min-w-[140px] justify-center py-1 border rounded-xl items-center bg-white hover:bg-[#f2f0f0] disabled:bg-gray-100"
           onClick={handleSaveWord}
+          disabled={isSaved}
         >
-          <PiBookmarkSimpleLight /> Save
+          <PiBookmarkSimpleLight />{isPending ? "Saving..." : isSaved ? "Saved" : "Save"} 
         </button>
       </div>
     </div>

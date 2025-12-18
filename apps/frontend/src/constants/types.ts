@@ -31,3 +31,13 @@ export interface Text {
   content: string
   createdAt: string
 }
+
+export interface UserWord {
+  id: string
+  userId: string
+  wordId: string
+  level: number
+  createdAt: string
+  updatedAt: string
+  word: Word
+}
