@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CardHeader } from "@/components/ui/card";
-import { Card } from "@radix-ui/themes";
+import { Card, CardHeader } from "@/components/ui/card";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 // import { toast } from "react-toastify";

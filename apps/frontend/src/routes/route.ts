@@ -6,6 +6,7 @@ import { ProtectedRoute } from "../components/ProtectedRoute";
 import { index } from "../pages/ProtectdRoutes";
 import { Dashboard } from "../pages/ProtectdRoutes/Dashboard";
 import { ReadingView } from "@/pages/ProtectdRoutes/ReadingView";
+import { UserSaveWords } from "@/pages/ProtectdRoutes/UserSaveWords";
 
 export const routes = createBrowserRouter([
   {
@@ -35,11 +36,11 @@ export const routes = createBrowserRouter([
                 path: "/read-view",
                 Component: ReadingView,
               },
+              {
+                path: "/saved-word",
+                Component: UserSaveWords,
+              },
             ],
-          },
-          {
-            path: "/dashboard",
-            Component: Dashboard,
           },
         ],
       },
