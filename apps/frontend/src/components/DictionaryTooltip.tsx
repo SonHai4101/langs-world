@@ -6,6 +6,7 @@ import {
   PiSpeakerSimpleHighLight,
 } from "react-icons/pi";
 import { normalizeWord } from "../../../backend/src/utils/normalizeWord";
+import { toast } from "react-toastify";
 
 type DictionaryTooltipProps = {
   word: string;
@@ -16,9 +17,6 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
   const { data: dictionaryData, isLoading, isError } = useDictionary(word);
   const { mutate: saveWord, isPending } = useLookupWord();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  console.log("data",userSaveWord?.data );
-  
 
   if (isLoading) {
     return <div className="text-xs text-gray-500">Loading ...</div>;
@@ -56,7 +54,10 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
   };
 
   const handleSaveWord = () => {
-    saveWord({word: entry.word}, );
+    saveWord(
+      { word: entry.word },
+      { onSuccess: () => toast.success("Save successfully!") }
+    );
   };
 
   return (
@@ -87,7 +88,8 @@ export const DictionaryTooltip = ({ word }: DictionaryTooltipProps) => {
           onClick={handleSaveWord}
           disabled={isSaved}
         >
-          <PiBookmarkSimpleLight />{isPending ? "Saving..." : isSaved ? "Saved" : "Save"} 
+          <PiBookmarkSimpleLight />
+          {isPending ? "Saving..." : isSaved ? "Saved" : "Save"}
         </button>
       </div>
     </div>

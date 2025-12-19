@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { DictionaryTooltip } from "./DictionaryTooltip";
 import { usePrefetchDictionary } from "@/hook/usePrefetchDictionary";
+import { useListUserSaveWord } from "@/hook/useWord";
+import { normalizeWord } from "../../../backend/src/utils/normalizeWord";
 
 type HoverWordProps = {
   value: string;
 };
 
 export const HoverWord = ({ value }: HoverWordProps) => {
+  const { data: userSaveWord } = useListUserSaveWord({ page: 1, limit: 9999 });
   const isWord = /\p{L}|\p{N}/u.test(value);
   const [show, setShow] = useState(false);
   const prefetch = usePrefetchDictionary();
@@ -15,6 +18,11 @@ export const HoverWord = ({ value }: HoverWordProps) => {
   const handleToggle = () => {
     (prefetch(value), setShow((prev) => !prev));
   };
+
+  const normalizeEntryWord = normalizeWord(value);
+  const isSaved = userSaveWord?.data?.some(
+    (item) => item.word.normalized === normalizeEntryWord
+  );
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -38,7 +46,7 @@ export const HoverWord = ({ value }: HoverWordProps) => {
   return (
     <span
       ref={ref}
-      className="relative cursor-pointer hover:bg-yellow-200 transition rounded px-0.5"
+      className={`relative cursor-pointer ${isSaved && "hover:bg-yellow-200"} transition rounded px-0.5 ${!isSaved && "bg-[#e0d9f7] hover:bg-[#c8b7fe]"}`}
       onClick={(e) => {
         e.stopPropagation;
         handleToggle();

@@ -37,7 +37,7 @@ export const ReadingView = () => {
             <p>Hard</p>
           </div>
           <div className="flex gap-1 items-center">
-            <GoDotFill className="text-[#9172fe]" />
+            <GoDotFill className="text-[#af99f6]" />
             <p>New</p>
           </div>
         </div>
