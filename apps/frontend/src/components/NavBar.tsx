@@ -64,7 +64,7 @@ export function Navbar({ isHome = true }: NavBarProps) {
                 <p className="font-bold">My Vocabulary</p>
               </div>
             </div>
-            <p className="font-bold">10 words</p>
+            <p className="font-bold px-3 py-1 bg-[#f4eee0] rounded-xl">10 words</p>
           </div>
         )}
       </div>
