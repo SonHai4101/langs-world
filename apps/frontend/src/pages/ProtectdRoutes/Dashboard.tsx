@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader } from "@/components/ui/card";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 // import { toast } from "react-toastify";
 import { GrDocumentText } from "react-icons/gr";
-import { Textarea } from "@/components/ui/textarea";
 import { FaArrowRight } from "react-icons/fa";
 import { usePostText } from "@/hook/useText";
 import { useNavigate } from "react-router";
@@ -55,26 +52,32 @@ export const Dashboard = () => {
           </p>
         </div>
 
-        {/* Upload Section */}
+        {/* Upload Section (plain Tailwind) */}
         <div>
-          <Card className="mb-8 border-dashed border-2 border-black/30 bg-linear-to-br from-white to-purple-50/30 dark:from-gray-800 dark:to-purple-900/10">
-            <CardHeader>
-              <Textarea
+          <div className="mb-8 border-dashed border-2 border-black/30 bg-gradient-to-br from-white to-purple-50/30 dark:from-gray-800 dark:to-purple-900/10 rounded-lg p-4">
+            <div>
+              <textarea
                 rows={10}
-                placeholder="Paste your text here... &#10;&#10;Try pasting an article, a book excerpt, or any content in the language you're learning."
-                className="resize-none p-0 bg-none border-0 focus-visible:ring-0 shadow-none"
+                placeholder={
+                  "Paste your text here...\n\nTry pasting an article, a book excerpt, or any content in the language you're learning."
+                }
+                className="w-full resize-none p-4 bg-transparent border-0 focus:outline-none focus:ring-0 text-sm min-h-[12rem]"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                aria-label="Paste text to analyze"
               />
-            </CardHeader>
-          </Card>
+            </div>
+          </div>
+
           <div className="justify-end flex">
-            <Button
-              className="flex gap-3 text-lg text-white py-5"
+            <button
+              type="button"
               onClick={handleAnalyze}
+              disabled={content.trim().length === 0}
+              className="flex items-center gap-3 text-lg text-white py-3 px-5 bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Analyze Text <FaArrowRight />
-            </Button>
+            </button>
           </div>
         </div>
 
